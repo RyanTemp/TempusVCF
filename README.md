@@ -15,7 +15,7 @@ For this project please upload all relevant code (written in whatever language y
 Here, I developed a small tool in response to the above described challenge. This tool will take in the input vcf file, then using SnpEff, it will annotate the deleteriousness and impact of each variants. 
 
 ## Dependencies
-1. This tool require latest version of SnpEff.
+1. This tool requires the latest version of SnpEff.
 Download latest version of SnpEff and install it under `HOME` directory
 ```bash
 cd ~
