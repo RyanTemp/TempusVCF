@@ -40,7 +40,7 @@ pip install pyvcf
 ## Usage
 In the directory containing `annotation.py` script, run
 ```bash
-python annotation.py -i Path_to_Challenge_data.vcf -o Path_to_Challenge_data.ann.vcf
+python annotation.py -i Path/To/Challenge_data.vcf -o Path/To/Challenge_data.ann.vcf
 ```
 To get the help description, run
 ```bash
