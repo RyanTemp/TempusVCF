@@ -15,7 +15,9 @@ For this project please upload all relevant code (written in whatever language y
 Here, I developed a small tool in response to the above described challenge. This tool will take in the input vcf file, then using SnpEff, it will annotate the deleteriousness and impact of each variants. 
 
 ## Dependencies
-1. This tool requires the latest version of SnpEff.
+1. This tool is written in python2.7. Please first make sure python is installed.
+
+2. This tool requires the latest version of SnpEff.
 Download latest version of SnpEff and install it under `HOME` directory
 ```bash
 cd ~
@@ -27,7 +29,7 @@ Download the `GRCh37.75` database.
 java -jar $HOME/snpEff/snpEff.jar download GRCh37.75
 ```
 
-2. In addition to a few general packages `json` `urllib2` `os` `sys` `getopt` `time`, this tool also depends on PyVCF to parse and write vcf files.
+3. In addition to a few general packages `json` `urllib2` `os` `sys` `getopt` `time`, this tool also depends on PyVCF to parse and write vcf files.
 ```bash
 pip install pyvcf
 ```
