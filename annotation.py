@@ -10,6 +10,8 @@ from time import localtime, strftime
 # anno_file = 'task/anno_data.vcf'
 
 def print_help():
+    '''A general description of this tool. A help file.'''
+
     print "Annotate a given vcf file with follow information. Output an annotated vcf file."
     print "1. Type of variation. The most deleterious possibility from SnpEff output. [Effect_Type] in INFO field."
     print "2. Depth of sequence coverage at the site of variation. [DP] in INFO field"
@@ -30,12 +32,23 @@ def print_help():
 
     
 def run_SnpEff(vcf_file, snpEff_dir, genome, out_file):
+    '''A wrapper calling SnpEff.jar for annotating deleterious variants.'''
     command = "java -jar -Xmx4g " + snpEff_dir + "/snpEff.jar " + genome + " " + vcf_file + " > " + out_file
     os.system(command)
     return
 
 
 def fetch_ExAC_info(varID):
+    """Obtain ExAC allele frequency, all count, and allele number using
+       ExAC REST API. 
+       
+       A example of input varID is "14-21853913-T-C", which must consist 
+       Chromosome number, Position, Reference, and Alternative, separated
+       by "-".
+
+       This function outputs a dictionary with keys ExAC_AF, ExAC_AC, ExAC_AN
+       corresponding to allele_freq, allele_count, allele_num from ExAC.
+    """
     url = "http://exac.hms.harvard.edu/" + "rest/variant/" + varID
     data = json.load(urllib2.urlopen(url))
     var = data['variant']
@@ -60,7 +73,23 @@ def fetch_ExAC_info(varID):
 
 
 def max_impact(ANN):
-    
+    """Determine the highest putative impact from SnpEff annotated section "ANN" in 
+       the INFO field of each vcf record. It also outputs the most deleterious effect
+       type annotated by SnpEff. SnpEff automatically rank each possible annotation
+       based on their deleteriousness and impacts. 
+
+       Input ANN is a list of annotations of each variant provided by SnpEFF
+       [C|synonymous_variant|LOW|DVL1|ENSG00000107404|transcript|ENST00000378888|protein_coding|4/15|c.366A>G|p.Pro122Pro|651/3239|366/2088|122/695||,
+        C|synonymous_variant|LOW|DVL1|ENSG00000107404|transcript|ENST00000378891|protein_coding|4/15|c.366A>G|p.Pro122Pro|413/2926|366/2013|122/670||,
+        C|non_coding_transcript_exon_variant|MODIFIER|DVL1|ENSG00000107404|transcript|ENST00000472445|retained_intron|4/4|n.256A>G||||||]
+       
+       Output in this case will be two objects
+       max_ANN is the filtered ANN:
+       [C|synonymous_variant|LOW|DVL1|ENSG00000107404|transcript|ENST00000378888|protein_coding|4/15|c.366A>G|p.Pro122Pro|651/3239|366/2088|122/695||,
+        C|synonymous_variant|LOW|DVL1|ENSG00000107404|transcript|ENST00000378891|protein_coding|4/15|c.366A>G|p.Pro122Pro|413/2926|366/2013|122/670||]
+       effect_type is 
+       "synonymous_variant"
+    """
     if len(ANN) == 0:
         max_ANN = []
         effect_type = ''
@@ -80,7 +109,17 @@ def max_impact(ANN):
 
 
 def annotate(vcf_file, anno_file, SNPEFF_DIR, GENOME_VER, INFO_TO_KEEP):
-    
+
+    """Run SnpEff annotation; Parse the SnpEff annotated file; Obtain ExAC related information
+       Write annotated vcf file.
+
+       vcf_file is the path to the input vcf file. Challenge_data.vcf
+       anno_file is the path to the output vcf file. Challenge_data.ann.vcf
+       SNPEFF_DIR is the directory containing snpEff.jar.
+       GENOME_VER is "GRCh37.75".
+       INFO_TO_KEEP is a list of desired INFO IDs in the INFO field of the output vcf file.
+    """
+
     filename = os.path.splitext(vcf_file)[0]
     
     ## perform snpEff annotaion of variants' deleteriousness
@@ -172,12 +211,14 @@ def annotate(vcf_file, anno_file, SNPEFF_DIR, GENOME_VER, INFO_TO_KEEP):
             sample_indexes = '',
             samples = record.samples
         )
-
+        
+        ## INFO for each record that can be obtained from the original vcf file, or can be calculated without the need to visit each variant.
         new_record.INFO['AO'] = record.INFO['AO']
         new_record.INFO['RO'] = record.INFO['RO']
         new_record.INFO['DP'] = record.INFO['DP']
         new_record.INFO['Percent_Ref'] = float(record.INFO['RO'])/record.INFO['DP']*100
         
+        ## INFO for each record that need to be computed for each allele.
         new_record.INFO['Percent_Var'] = []
         new_record.INFO['ExAC_AF'] = []
         new_record.INFO['ExAC_AC'] = []
