@@ -16,7 +16,7 @@ Here, I developed a small tool in response to the above described challenge. Thi
 
 ## Dependencies
 1. This tool require latest version of SnpEff.
-Download latest version of SnpEff and install it under HOME directory
+Download latest version of SnpEff and install it under `HOME` directory
 ```bash
 cd ~
 wget https://downloads.sourceforge.net/project/snpeff/snpEff_latest_core.zip
@@ -33,7 +33,7 @@ pip install pyvcf
 ```
 ## Installation
 1. Download `annotation.py` script.
-2. In the main function, modify `SNPEFF_DIR` variable to indicate the path to the directory containing the `snpEff.jar` file. Usually, it is the unzipped directory from the downloaded snpEff_latest_core.zip file. As recommended above, this directory will be `$HOME/snpEff/`.
+2. In the `main()` function, modify `SNPEFF_DIR` variable to indicate the path to the directory containing the `snpEff.jar` file. Usually, it is the unzipped directory from the downloaded snpEff_latest_core.zip file. As recommended above, this directory will be `$HOME/snpEff/`.
 3. In the directory containing `annotation.py` script, run
 ```bash
 python annotation.py -i Challenge_data.vcf -o Challenge_data.ann.vcf
