@@ -36,7 +36,17 @@ pip install pyvcf
 ## Installation
 1. Download `annotation.py` script.
 2. In the `main()` function, modify `SNPEFF_DIR` variable to indicate the path to the directory containing the `snpEff.jar` file. Usually, it is the unzipped directory from the downloaded snpEff_latest_core.zip file. As recommended above, this directory will be `$HOME/snpEff/`.
-3. In the directory containing `annotation.py` script, run
+
+## Usage
+In the directory containing `annotation.py` script, run
 ```bash
-python annotation.py -i Challenge_data.vcf -o Challenge_data.ann.vcf
+python annotation.py -i Path_to_Challenge_data.vcf -o Path_to_Challenge_data.ann.vcf
+```
+To get the help description, run
+```bash
+python annotation.py -h
+```
+or
+```bash
+python annotation
 ```
