@@ -48,5 +48,5 @@ python annotation.py -h
 ```
 or
 ```bash
-python annotation
+python annotation.py
 ```
