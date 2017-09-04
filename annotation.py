@@ -1,5 +1,3 @@
-#!/Users/Ryan/anaconda2/bin/python
-
 import vcf
 import json
 import urllib2
